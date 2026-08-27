@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📋 Attendance App
 
 A simple Flutter attendance management app with **Admin** and **Teacher** roles.
@@ -193,3 +194,6 @@ pubspec.yaml        # Dependencies
 
 **Android emulator not showing**
 → Make sure the emulator is fully booted in Android Studio before running `flutter run`.
+=======
+# atendance-app
+>>>>>>> a4ddf4df41850f9479240925d55e3799604ec8b5
