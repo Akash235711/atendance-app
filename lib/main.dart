@@ -529,36 +529,60 @@ class _AttendancePageState extends State<AttendancePage> {
         ),
         const Divider(height: 1),
         // Students
-        Expanded(child: _loading ? const Center(child: CircularProgressIndicator())
-          : _students.isEmpty ? const Center(child: Text('No students in this course'))
-          : ListView.builder(itemCount: _students.length, itemBuilder: (_, i) {
-              final s = _students[i]; final st = _status[s.id];
-              return ListTile(
-                title: Text(s.name),
-                subtitle: Text('Roll: ${s.roll}'),
-                trailing: Row(mainAxisSize: MainAxisSize.min, children: S.values.map((v) =>
-                  Padding(padding: const EdgeInsets.only(left: 4), child: ElevatedButton(
-                    onPressed: () => _mark(s.id, v),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: st == v ? _color(v) : Colors.grey[300],
-                      foregroundColor: st == v ? Colors.white : Colors.black,
-                      minimumSize: const Size(36, 36), padding: EdgeInsets.zero),
-                    child: Text(_label(v)),
-                  ))).toList(),
-              );
-            })),
-        // Mark all bar
-        if (_students.isNotEmpty) Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(children: [
-            const Text('Mark All: '),
-            ...S.values.map((v) => Padding(padding: const EdgeInsets.only(left: 8),
-              child: ElevatedButton(
-                onPressed: () => _markAll(v),
-                style: ElevatedButton.styleFrom(backgroundColor: _color(v), foregroundColor: Colors.white),
-                child: Text(_label(v))))),
-          ]),
+        Expanded(
+          child: Builder(builder: (_) {
+            if (_loading) return const Center(child: CircularProgressIndicator());
+            if (_students.isEmpty) return const Center(child: Text('No students in this course'));
+            return ListView.builder(
+              itemCount: _students.length,
+              itemBuilder: (ctx, i) {
+                final s = _students[i];
+                final st = _status[s.id];
+                final btns = S.values.map((v) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: ElevatedButton(
+                      onPressed: () => _mark(s.id, v),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: st == v ? _color(v) : Colors.grey[300],
+                        foregroundColor: st == v ? Colors.white : Colors.black,
+                        minimumSize: const Size(36, 36),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(_label(v)),
+                    ),
+                  );
+                }).toList();
+                return ListTile(
+                  title: Text(s.name),
+                  subtitle: Text('Roll: ${s.roll}'),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: btns),
+                );
+              },
+            );
+          }),
         ),
+        // Mark all bar
+        if (_students.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                const Text('Mark All: '),
+                ...S.values.map((v) => Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ElevatedButton(
+                    onPressed: () => _markAll(v),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _color(v),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text(_label(v)),
+                  ),
+                )),
+              ],
+            ),
+          ),
       ]),
     );
   }
